@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/jobs');
+        const res = await fetch('https://react-jobs-production.up.railway.app/api/jobs');
         if (!res.ok) throw new Error('Failed to fetch jobs');
         const data = await res.json();
         setJobs(data);
