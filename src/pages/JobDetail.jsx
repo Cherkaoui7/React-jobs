@@ -10,7 +10,7 @@ const JobDetail = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`fetch('https://react-jobs-production.up.railway.app/api/jobs')/${id}`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/jobs/${id}`);
         if (!res.ok) throw new Error('Job not found');
         const data = await res.json();
         setJob(data);
