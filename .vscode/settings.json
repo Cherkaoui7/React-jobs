@@ -1,0 +1,5 @@
+{
+  "css.customData": ["./node_modules/tailwindcss-vscode/tailwindcss.css-data.json"],
+  "tailwindCSS.experimental.configFile": "./tailwind.config.js",
+  "css.lint.unknownAtRules": "ignore"
+}
