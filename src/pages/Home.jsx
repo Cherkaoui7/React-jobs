@@ -1,9 +1,9 @@
 // src/pages/Home.jsx
 import { useState, useEffect } from 'react';
-
 import SectionCard from '../components/SectionCard';
 import JobCard from '../components/JobCard';
 import { Link } from 'react-router-dom';
+
 const Home = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/jobs`);
+        const res = await fetch('http://localhost:5000/api/jobs');
         if (!res.ok) throw new Error('Failed to fetch jobs');
         const data = await res.json();
         setJobs(data);
@@ -28,7 +28,6 @@ const Home = () => {
 
   return (
     <div>
-      {/* Bannière avec bouton “Browse All Jobs” */}
       <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16 px-6">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full -translate-y-12 translate-x-12"></div>
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-white opacity-5 rounded-full translate-y-12 -translate-x-12"></div>

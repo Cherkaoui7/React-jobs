@@ -1,3 +1,4 @@
+// src/pages/Jobs.jsx
 import { useState, useEffect } from 'react';
 import JobCard from '../components/JobCard';
 
@@ -8,7 +9,7 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/jobs`);
+        const res = await fetch('http://localhost:5000/api/jobs');
         if (!res.ok) throw new Error('Failed to fetch jobs');
         const data = await res.json();
         setJobs(data);
@@ -37,14 +38,14 @@ const Jobs = () => {
           {jobs.length > 0 ? (
             jobs.map((job) => (
               <JobCard
-  key={job._id}
-  _id={job._id}          
-  title={job.title}
-  company={job.company}
-  location={job.location}
-  salary={job.salary}
-  description={job.description}
-/>
+                key={job._id}
+                _id={job._id}
+                title={job.title}
+                company={job.company}
+                location={job.location}
+                salary={job.salary}
+                description={job.description}
+              />
             ))
           ) : (
             <p className="text-center col-span-2 text-gray-500">No jobs available.</p>

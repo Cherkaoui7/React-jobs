@@ -1,13 +1,13 @@
+// server/routes/jobs.js
 const express = require('express');
 const Job = require('../models/Job');
 
 const router = express.Router();
 
-// POST /api/jobs - Ajouter une offre (saisie libre)
+// POST /api/jobs
 router.post('/', async (req, res) => {
   try {
     const { title, company, location, salary, description } = req.body;
-
     const job = new Job({
       title: title || 'Untitled Job',
       company: company || 'Unknown Company',
@@ -15,7 +15,6 @@ router.post('/', async (req, res) => {
       salary: salary || 'Negotiable',
       description: description || 'No description provided.'
     });
-
     await job.save();
     res.status(201).json(job);
   } catch (err) {
@@ -24,7 +23,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/jobs - Lister toutes les offres
+// GET /api/jobs
 router.get('/', async (req, res) => {
   try {
     const jobs = await Job.find().sort({ createdAt: -1 });
@@ -33,7 +32,8 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-// GET /api/jobs/:id — Récupérer un job par ID
+
+// GET /api/jobs/:id ← NOUVEAU
 router.get('/:id', async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);

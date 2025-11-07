@@ -18,3 +18,20 @@ body {
   margin: 0;
   padding: 0;
 }
+/* src/index.css – à la fin du fichier */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Pour les éléments avec backdrop-blur */
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg {
+  -webkit-backdrop-filter: blur(4px); /* fallback pour Safari */
+  backdrop-filter: blur(4px);
+  /* Force le rendu GPU propre */
+  transform: translateZ(0);
+  will-change: filter;
+}

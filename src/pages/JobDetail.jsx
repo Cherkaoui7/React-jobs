@@ -10,7 +10,7 @@ const JobDetail = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/jobs/${id}`);
+        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
         if (!res.ok) throw new Error('Job not found');
         const data = await res.json();
         setJob(data);
@@ -39,64 +39,74 @@ const JobDetail = () => {
   }
 
   return (
-    <div className="py-10 px-6 max-w-4xl mx-auto">
-      <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <span className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm mb-2">Full-Time</span>
-            <h1 className="text-2xl font-bold text-gray-800">{job.title}</h1>
-            <p className="text-lg text-gray-500 mt-1">{job.company}</p>
-          </div>
-          <div className="text-gray-400 text-sm flex items-center">
-            <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L7 11H5v-2L2.05 6.05zm6.95 6.95L8 14.95V17h2l2.95-2.95z" clipRule="evenodd" />
-            </svg>
-            {job.location}
-          </div>
+    // src/pages/JobDetail.jsx (extrait clé)
+<div className="max-w-4xl mx-auto px-6">
+  <div className="bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/10">
+    {/* Sticky header */}
+    <div className="sticky top-0 bg-gradient-to-r from-indigo-900/80 to-cyan-900/80 
+      backdrop-blur-md text-white p-8 z-10">
+      <div className="flex justify-between items-start">
+        <div>
+          <span className="inline-block bg-white/20 px-3 py-1 rounded-full text-sm mb-3">🚀 Featured</span>
+          <h1 className="text-3xl font-bold font-heading">{job?.title}</h1>
+          <p className="text-indigo-200 mt-2">{job?.company} • {job?.location}</p>
         </div>
-
-        {/* Salary */}
-        <div className="mb-6">
-          <div className="flex items-center text-indigo-600 font-semibold">
-            💰 <span className="ml-2">${job.salary} / Year</span>
-          </div>
-        </div>
-
-        {/* Description */}
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">📌 About the Role</h2>
-          <p className="text-gray-700 whitespace-pre-line">{job.description}</p>
-        </div>
-
-        {/* Additional Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-blue-800 mb-2">✅ Requirements</h3>
-            <ul className="list-disc list-inside text-blue-700">
-              <li>Experience with React.js</li>
-              <li>Strong JavaScript skills</li>
-              <li>Ability to work in a team</li>
-            </ul>
-          </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-green-800 mb-2">✨ Benefits</h3>
-            <ul className="list-disc list-inside text-green-700">
-              <li>Remote work</li>
-              <li>Flexible hours</li>
-              <li>Professional development</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Back button */}
-        <div className="mt-6">
-          <Link to="/jobs" className="text-indigo-600 hover:underline font-medium">
-            ← Back to All Jobs
-          </Link>
-        </div>
+        <div className="text-3xl">💼</div>
       </div>
     </div>
+
+    <div className="p-8">
+      {/* Salary badge */}
+      <div className="inline-block bg-gradient-to-r from-indigo-600 to-cyan-600 
+        text-white px-4 py-2 rounded-full font-bold mb-6">
+        💰 ${job?.salary} / Year
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white flex items-center mb-4 font-heading">
+          <span className="mr-2">📌</span> About the Role
+        </h2>
+        <p className="text-gray-900 whitespace-pre-line">{job?.description}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Requirements */}
+        <div className="bg-indigo-900/30 border border-indigo-500/30 rounded-xl p-5">
+          <h3 className="font-bold text-indigo-700 mb-3 flex items-center">
+            <span className="mr-2">✅</span> Requirements
+          </h3>
+          <ul className="text-black space-y-1">
+            <li>• 3+ years React experience</li>
+            <li>• TypeScript proficiency</li>
+            <li>• CI/CD familiarity</li>
+          </ul>
+        </div>
+
+        {/* Benefits */}
+        <div className="bg-cyan-900/30 border border-cyan-500/30 rounded-xl p-5">
+          <h3 className="font-bold text-cyan-900 mb-3 flex items-center">
+            <span className="mr-2">✨</span> Perks & Benefits
+          </h3>
+          <ul className="text-cyan-100 space-y-1">
+            <li>• 💰 Competitive salary</li>
+            <li>• 🌍 Remote-first</li>
+            <li>• 🎓 $3,000 learning stipend</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <button className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-cyan-600 
+          text-white font-bold rounded-xl shadow-lg hover:shadow-xl 
+          transition-all transform hover:-translate-y-1 relative overflow-hidden">
+          <span className="relative z-10">Apply Now →</span>
+          <span className="absolute inset-0 bg-white opacity-0 hover:opacity-10 
+            rounded-xl animate-ping"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
   );
 };
 
