@@ -23,16 +23,13 @@ const JobForm = () => {
     setErrors({});
 
     try {
-      console.log('Sending data:', formData);
       const res = await fetch('http://localhost:5000/api/jobs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
 
-      console.log('Response status:', res.status);
       const data = await res.json();
-      console.log('Response data:', data);
 
       if (!res.ok) {
         if (data.errors && Array.isArray(data.errors)) {
