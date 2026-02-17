@@ -3,3 +3,14 @@
 .env
 node_modules/
 build/
+coverage/
+logs/
+*.log
+.vscode/
+.idea/
+
+# Backend specific
+server/node_modules/
+server/.env
+server/data/
+server/install_log.txt
