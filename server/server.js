@@ -22,7 +22,6 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/jobs', jobRoutes);
-app.use('/api/jobs', jobRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
