@@ -1,0 +1,123 @@
+// src/components/ChatBot.jsx
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChatBubbleLeftRightIcon, XMarkIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
+
+const ChatBot = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [messages, setMessages] = useState([
+        { id: 1, text: "Hi there! 👋 How can I help you find your dream job today?", sender: 'bot' }
+    ]);
+    const [inputText, setInputText] = useState("");
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(scrollToBottom, [messages]);
+
+    const handleSend = (e) => {
+        e.preventDefault();
+        if (!inputText.trim()) return;
+
+        // User message
+        const newMessage = { id: Date.now(), text: inputText, sender: 'user' };
+        setMessages(prev => [...prev, newMessage]);
+        setInputText("");
+
+        // Bot response simulation
+        setTimeout(() => {
+            const botResponse = {
+                id: Date.now() + 1,
+                text: "Thanks for reaching out! I'm just a demo bot for now, but I hope you love the site! 🚀",
+                sender: 'bot'
+            };
+            setMessages(prev => [...prev, botResponse]);
+        }, 1000);
+    };
+
+    return (
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                        className="mb-4 w-80 md:w-96 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
+                    >
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 flex justify-between items-center text-white">
+                            <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <h3 className="font-bold">ReactJobs Assistant</h3>
+                            </div>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="hover:bg-white/20 p-1 rounded-full transition"
+                            >
+                                <XMarkIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Messages */}
+                        <div className="h-80 overflow-y-auto p-4 bg-gray-50 space-y-3">
+                            {messages.map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div
+                                        className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
+                                                ? 'bg-indigo-600 text-white rounded-tr-none'
+                                                : 'bg-white text-gray-800 shadow-sm border border-gray-100 rounded-tl-none'
+                                            }`}
+                                    >
+                                        {msg.text}
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* Input */}
+                        <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                placeholder="Type a message..."
+                                className="flex-1 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                            />
+                            <button
+                                type="submit"
+                                className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition transform hover:scale-105 active:scale-95 disabled:opacity-50"
+                                disabled={!inputText.trim()}
+                            >
+                                <PaperAirplaneIcon className="w-5 h-5" />
+                            </button>
+                        </form>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Floating Button */}
+            <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-14 h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full 
+          shadow-lg flex items-center justify-center hover:shadow-indigo-500/30 hover:shadow-xl transition-shadow"
+            >
+                {isOpen ? (
+                    <XMarkIcon className="w-7 h-7" />
+                ) : (
+                    <ChatBubbleLeftRightIcon className="w-7 h-7" />
+                )}
+            </motion.button>
+        </div>
+    );
+};
+
+export default ChatBot;

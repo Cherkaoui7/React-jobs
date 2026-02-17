@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Jobs from './pages/Jobs';
 import AddJob from './pages/AddJob';
 import JobDetail from './pages/JobDetail';
+import ChatBot from './components/ChatBot';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/add-job" element={<AddJob />} />
         <Route path="/job/:id" element={<JobDetail />} />
       </Routes>
+      <ChatBot />
     </div>
   );
 }
