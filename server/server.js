@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const jobRoutes = require('./routes/jobs');
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -20,6 +21,7 @@ app.use(helmet());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 
+app.use('/api/jobs', jobRoutes);
 app.use('/api/jobs', jobRoutes);
 
 app.use((req, res) => {
