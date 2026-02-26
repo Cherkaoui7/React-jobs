@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { createJob } from '../utils/api';
+import Toast from './Toast';
+import { AnimatePresence } from 'framer-motion';
 
 const JobForm = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +13,7 @@ const JobForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,42 +25,37 @@ const JobForm = () => {
     e.preventDefault();
     setLoading(true);
     setErrors({});
+    setToast(null);
 
     try {
-      const res = await fetch('http://localhost:5000/api/jobs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      await createJob(formData);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        if (data.errors && Array.isArray(data.errors)) {
-          const errMap = {};
-          data.errors.forEach(err => {
-            errMap[err.param] = err.msg || 'Invalid format';
-          });
-          setErrors(errMap);
-        } else {
-          alert('❌ ' + (data.message || 'Validation failed. Check salary format: "70K - 80K"'));
-        }
-        return;
-      }
-
-      alert('✅ Job posted successfully!');
+      setToast({ message: '✅ Job posted successfully!', type: 'success' });
       setFormData({ title: '', company: '', location: '', salary: '', description: '' });
-      setTimeout(() => window.location.href = '/', 500);
+      setTimeout(() => window.location.href = '/', 1500);
     } catch (err) {
       console.error(err);
-      alert('❌ Network error. Is the backend running?');
+      if (err.status === 400 && err.data) {
+        setToast({ message: err.data.message || 'Validation failed.', type: 'error' });
+      } else {
+        setToast({ message: '❌ Error creating job. Please try again.', type: 'error' });
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md border border-gray-200">
+    <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md border border-gray-200 relative">
+      <AnimatePresence>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Post a New Job</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>

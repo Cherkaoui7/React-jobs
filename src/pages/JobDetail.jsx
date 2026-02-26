@@ -1,28 +1,30 @@
 // src/pages/JobDetail.jsx
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { fetchJobById } from '../utils/api';
+import Toast from '../components/Toast';
+import { AnimatePresence } from 'framer-motion';
 
 const JobDetail = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    const fetchJob = async () => {
+    const loadJob = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
-        if (!res.ok) throw new Error('Job not found');
-        const data = await res.json();
+        const data = await fetchJobById(id);
         setJob(data);
       } catch (err) {
         console.error('Error loading job:', err);
-        alert('❌ Job not found or server error');
+        setToast({ message: 'Job not found', type: 'error' });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchJob();
+    loadJob();
   }, [id]);
 
   if (loading) {
@@ -32,6 +34,15 @@ const JobDetail = () => {
   if (!job) {
     return (
       <div className="text-center py-10">
+        <AnimatePresence>
+          {toast && (
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
+            />
+          )}
+        </AnimatePresence>
         <p>Job not found.</p>
         <Link to="/jobs" className="text-indigo-600 hover:underline">Back to Jobs</Link>
       </div>
@@ -40,7 +51,16 @@ const JobDetail = () => {
 
   return (
     // src/pages/JobDetail.jsx (extrait clé)
-    <div className="max-w-4xl mx-auto px-6 pt-24">
+    <div className="max-w-4xl mx-auto px-6 pt-24 relative">
+      <AnimatePresence>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
       <div className="bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/10">
         {/* Header */}
         <div className="relative bg-gradient-to-r from-indigo-900/80 to-cyan-900/80 

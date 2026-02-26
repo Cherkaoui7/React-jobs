@@ -1,31 +1,42 @@
 // src/pages/Jobs.jsx
 import { useState, useEffect } from 'react';
 import JobCard from '../components/JobCard';
+import { fetchJobs } from '../utils/api';
+import Toast from '../components/Toast';
+import { AnimatePresence } from 'framer-motion';
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const loadJobs = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/jobs');
-        if (!res.ok) throw new Error('Failed to fetch jobs');
-        const data = await res.json();
+        const data = await fetchJobs();
         setJobs(data);
       } catch (err) {
         console.error('Error loading jobs:', err);
-        alert('❌ Failed to load jobs. Is the backend running?');
+        setToast({ message: 'Failed to load jobs.', type: 'error' });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchJobs();
+    loadJobs();
   }, []);
 
   return (
     <div className="py-10 px-6 max-w-4xl mx-auto">
+      <AnimatePresence>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Jobs</h1>
       <p className="text-gray-600 mb-4">
         Browse all available jobs.
